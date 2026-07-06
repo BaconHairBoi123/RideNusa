@@ -8,7 +8,7 @@
             <label class="block text-sm font-bold text-gray-700 mb-2">Cari Motor (Plat Nomer / Brand / Type)*</label>
             <input 
                 type="text" 
-                id="search-input" 
+                id="motorcycle-autocomplete-device" 
                 placeholder="Contoh: B 1234 AB atau Honda atau CB"
                 class="w-full border p-3 rounded mb-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 autocomplete="off"
@@ -21,7 +21,7 @@
     </div>
 
     <script>
-        const searchInput = document.getElementById('search-input');
+        const searchInput = document.getElementById('motorcycle-autocomplete-device');
         const searchResults = document.getElementById('search-results');
         let searchTimeout;
 

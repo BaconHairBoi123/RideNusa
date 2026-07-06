@@ -11,7 +11,7 @@
     <div class="bg-white p-6 rounded-lg shadow-md mb-6 border-l-4 border-blue-500">
         <h2 class="text-lg font-semibold mb-4 text-gray-700">Langkah 1: Pilih Kendaraan</h2>
         <div class="relative">
-            <input type="text" id="search-input" placeholder="Ketik Plat Nomor atau Merk Motor... (Contoh: B 1234 ABC)"
+            <input type="text" id="motorcycle-autocomplete-service" placeholder="Ketik Plat Nomor atau Merk Motor... (Contoh: B 1234 ABC)"
                 class="w-full border-2 border-gray-200 p-3 rounded-lg focus:border-blue-500 focus:outline-none transition">
 
             {{-- Hasil pencarian akan muncul melayang di bawah input ini --}}
@@ -111,7 +111,7 @@
     </div>
     <script>
         const motorcycles = @json($motorcycles);
-        const searchInput = document.getElementById('search-input');
+        const searchInput = document.getElementById('motorcycle-autocomplete-service');
         const resultsDiv = document.getElementById('search-results');
         const formSection = document.getElementById('service-form-section');
 
