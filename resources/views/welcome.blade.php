@@ -80,6 +80,55 @@
             margin: 0 !important;
             white-space: nowrap !important;
         }
+        @media (max-width: 1199px) {
+            .main-header .container {
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
+            }
+            .main-menu__middle-box {
+                margin: 0 !important;
+            }
+            .mobile-nav__toggler {
+                display: block !important;
+                color: #FFB51D !important;
+                font-size: 28px !important;
+                padding: 10px;
+                z-index: 999;
+            }
+            .logo-desktop {
+                display: none !important;
+            }
+            .logo-mobile {
+                display: block !important;
+            }
+        }
+        /* Customize mobile nav overlay to be completely transparent so background stays bright */
+        .mobile-nav__overlay {
+            background-color: transparent !important;
+            opacity: 1 !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+        /* Optimize mobile nav transition speed and remove 500ms delay */
+        .mobile-nav__wrapper {
+            transition: transform 300ms ease, visibility 300ms ease !important;
+            -webkit-transition: -webkit-transform 300ms ease, visibility 300ms ease !important;
+        }
+        .mobile-nav__wrapper.expanded {
+            transition: transform 300ms ease, visibility 300ms ease !important;
+            -webkit-transition: -webkit-transform 300ms ease, visibility 300ms ease !important;
+        }
+        .mobile-nav__content {
+            transition: transform 300ms ease, opacity 300ms ease !important;
+            -webkit-transition: -webkit-transform 300ms ease, opacity 300ms ease !important;
+        }
+        .mobile-nav__wrapper.expanded .mobile-nav__content {
+            transition: transform 300ms ease, opacity 300ms ease !important;
+            -webkit-transition: -webkit-transform 300ms ease, opacity 300ms ease !important;
+        }
     </style>
 </head>
 
@@ -94,7 +143,9 @@
 
                             <a class="navbar-brand" href="{{ url('/') }}">
                                 <img src="{{ asset('img/logo/logo_ridenusa_white_BTG.png') }}" alt="Ride Nusa"
-                                    style="height:100px;">
+                                    class="logo-desktop" style="height:100px;">
+                                <img src="{{ asset('img/logo/logo_ridenusa_BGT.png') }}" alt="Ride Nusa"
+                                    class="logo-mobile" style="height:60px; display:none;">
                             </a>
                         </div>
                         <div class="main-menu__middle-box">
@@ -433,6 +484,29 @@
             </div>
         </div>
     </section>
+
+    <!--Mobile Nav-->
+    <div class="mobile-nav__wrapper">
+        <div class="mobile-nav__overlay mobile-nav__toggler"></div>
+        <div class="mobile-nav__content">
+            <span class="mobile-nav__close mobile-nav__toggler"><i class="fa fa-times"></i></span>
+            <div class="logo-box">
+                <a href="{{ url('/') }}" aria-label="logo image"><img
+                        src="{{ asset('img/logo/logo_ridenusa_white_BTG.png') }}" width="150" alt="Ride Nusa" /></a>
+            </div>
+            <div class="mobile-nav__container"></div>
+            <ul class="mobile-nav__contact list-unstyled">
+                <li>
+                    <i class="fa fa-envelope"></i>
+                    <a href="mailto:support@ridenusa.com">support@ridenusa.com</a>
+                </li>
+                <li>
+                    <i class="fas fa-phone"></i>
+                    <a href="tel:+6281234567890">+62 812-3456-7890</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
 
 

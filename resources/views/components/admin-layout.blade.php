@@ -101,5 +101,50 @@
         </main>
     </div>
 
+    {{-- Universal Table / Data Search Script --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const globalSearchInput = document.getElementById('global-table-search');
+            if (globalSearchInput) {
+                const localSearchInput = document.getElementById('search-input');
+                
+                if (localSearchInput) {
+                    globalSearchInput.value = localSearchInput.value;
+                    
+                    globalSearchInput.addEventListener('input', function() {
+                        localSearchInput.value = this.value;
+                        localSearchInput.dispatchEvent(new Event('input'));
+                        localSearchInput.dispatchEvent(new Event('keyup'));
+                    });
+                    
+                    const localContainer = localSearchInput.closest('.mb-6') || localSearchInput.closest('div');
+                    if (localContainer && localContainer !== document.body) {
+                        localContainer.style.display = 'none';
+                    }
+                } else {
+                    globalSearchInput.addEventListener('input', function() {
+                        const query = this.value.toLowerCase().trim();
+                        const tables = document.querySelectorAll('table');
+                        tables.forEach(table => {
+                            const rows = table.querySelectorAll('tbody tr');
+                            rows.forEach(row => {
+                                const cells = row.querySelectorAll('td');
+                                if (cells.length === 1 && (cells[0].textContent.includes('tidak ditemukan') || cells[0].textContent.includes('No data') || cells[0].colSpan > 1)) {
+                                    return;
+                                }
+                                
+                                const text = row.textContent.toLowerCase();
+                                if (text.includes(query)) {
+                                    row.style.display = '';
+                                } else {
+                                    row.style.display = 'none';
+                                }
+                            });
+                        });
+                    });
+                }
+            }
+        });
+    </script>
 </body>
 </html>

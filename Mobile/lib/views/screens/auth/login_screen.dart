@@ -89,13 +89,23 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     // Validation for SIM upload
-    if (_verificationType == 'sim' && (_licensePhotoPath == null || _licensePhotoPath!.isEmpty)) {
-      DialogHelper.showMessage(
-        context: context,
-        message: "Please upload your Driver's License (SIM) photo to proceed.",
-        isError: true,
-      );
-      return;
+    if (_verificationType == 'sim') {
+      if (_licensePhotoPath == null || _licensePhotoPath!.isEmpty) {
+        DialogHelper.showMessage(
+          context: context,
+          message: "Please upload your Driver's License (SIM) photo to proceed.",
+          isError: true,
+        );
+        return;
+      }
+      if (_facePhotoPath == null || _facePhotoPath!.isEmpty) {
+        DialogHelper.showMessage(
+          context: context,
+          message: "Please upload your Face Selfie photo to proceed.",
+          isError: true,
+        );
+        return;
+      }
     }
 
     // Close keyboard automatically
@@ -925,9 +935,9 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Face Upload Box (Optional but helpful)
+          // Face Upload Box (Required)
           _buildImageUploadBox(
-            title: 'Face Selfie Photo (Optional)',
+            title: 'Face Selfie Photo *',
             imagePath: _facePhotoPath,
             onTap: () => _pickImage('face'),
             onClear: () => setState(() => _facePhotoPath = null),

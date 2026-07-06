@@ -143,7 +143,7 @@
         </table>
 
         <div class="mt-4">
-            {{ $motorcycles->links() }}
+            {{ $motorcycles->links('pagination::tailwind') }}
         </div>
     </div>
 </x-admin-layout>

@@ -11,6 +11,19 @@
         </div>
     </div>
 
+    {{-- Global Search Bar --}}
+    <div class="flex-1 max-w-md mx-6 hidden md:block">
+        <div class="relative w-full">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <i class="ri-search-line text-gray-400 dark:text-gray-500 text-lg"></i>
+            </span>
+            <input type="text" 
+                   id="global-table-search" 
+                   placeholder="Search data..." 
+                   class="w-full pl-10 pr-4 py-2 text-sm bg-gray-100 dark:bg-dark-hover border border-transparent rounded-lg focus:outline-none focus:bg-white focus:border-brand dark:focus:bg-dark-base dark:focus:border-brand text-gray-800 dark:text-gray-200 transition-all duration-300">
+        </div>
+    </div>
+
     <div class="flex items-center gap-6">
         
         {{-- Dark Mode Toggle --}}

@@ -55,6 +55,15 @@ class _UpdateVerificationScreenState extends State<UpdateVerificationScreen> {
       return;
     }
 
+    if (_facePhotoPath == null || _facePhotoPath!.isEmpty) {
+      DialogHelper.showMessage(
+        context: context,
+        message: "Please upload your Face Selfie photo.",
+        isError: true,
+      );
+      return;
+    }
+
     setState(() => _isLoading = true);
 
     final result = await _authService.updateVerification(
@@ -253,7 +262,7 @@ class _UpdateVerificationScreenState extends State<UpdateVerificationScreen> {
               ),
               const SizedBox(height: 20),
               _buildImageUploadBox(
-                title: 'Face Selfie Photo (Optional)',
+                title: 'Face Selfie Photo *',
                 imagePath: _facePhotoPath,
                 onTap: () => _pickImage('face'),
                 onClear: () => setState(() => _facePhotoPath = null),

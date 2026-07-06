@@ -74,7 +74,7 @@
             </tbody>
         </table>
         <div class="mt-4">
-            {{ $users->withQueryString()->links() }}
+            {{ $users->withQueryString()->links('pagination::tailwind') }}
         </div>
     </div>
 </div>

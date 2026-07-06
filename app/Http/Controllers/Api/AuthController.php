@@ -21,7 +21,7 @@ class AuthController extends Controller
             'address' => 'required|string',
             'verification_type' => 'required|in:sim,course',
             'license_photo' => 'required_if:verification_type,sim|image|max:4096',
-            'face_photo' => 'nullable|image|max:4096',
+            'face_photo' => 'required_if:verification_type,sim|image|max:4096',
         ]);
 
         if ($validator->fails()) {
@@ -151,7 +151,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'license_photo' => 'required|image|max:4096',
-            'face_photo' => 'nullable|image|max:4096',
+            'face_photo' => 'required|image|max:4096',
         ]);
 
         if ($validator->fails()) {

@@ -54,7 +54,7 @@
         </table>
 
         <div class="p-4">
-            {{ $admins->links() }}
+            {{ $admins->links('pagination::tailwind') }}
         </div>
     </div>
 </div>
