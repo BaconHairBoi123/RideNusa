@@ -100,6 +100,6 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: false
   image_path: "assets/images/logo_ridenusa_white.png"
-  adaptive_icon_background: "#FFB51D"
+  adaptive_icon_background: "#FFA200"
   adaptive_icon_foreground: "assets/images/logo_ridenusa_white.png"
   min_sdk_android: 21
