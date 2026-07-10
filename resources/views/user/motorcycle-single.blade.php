@@ -309,6 +309,13 @@
             const distanceInfo = document.getElementById('distance-info');
             const accessoryCheckboxes = document.querySelectorAll('input[name="accessories[]"]');
 
+            const bookingForm = document.getElementById('booking-form');
+            if (bookingForm) {
+                bookingForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                });
+            }
+
             let currentDeliveryFee = 0;
 
             // 3. FUNGSI TOGGLE ALAMAT
@@ -387,6 +394,12 @@
                             });
                         }
                     });
+
+            // Prevent form submit on Enter key inside the address input
+            addressInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                }
             });
 
             // 5. FUNGSI HITUNG TOTAL

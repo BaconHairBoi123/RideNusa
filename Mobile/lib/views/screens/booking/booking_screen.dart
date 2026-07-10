@@ -250,7 +250,7 @@ class _BookingScreenState extends State<BookingScreen> {
           final paymentUrl = 'https://app.sandbox.midtrans.com/snap/v2/vtweb/$snapToken';
           final Uri url = Uri.parse(paymentUrl);
           if (await canLaunchUrl(url)) {
-            await launchUrl(url, mode: LaunchMode.externalApplication);
+            await launchUrl(url, mode: LaunchMode.inAppWebView);
           }
         } else {
           DialogHelper.showMessage(

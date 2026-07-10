@@ -35,9 +35,14 @@ class ReturnController extends Controller
     {
         $request->validate([
             'rental_id' => 'required',
-            'condition' => 'required',
-            'damage_fee' => 'nullable|numeric',
-            'notes' => 'nullable|string'
+            'condition' => 'required|in:good,minor_damage,major_damage',
+            'damage_fee' => 'required_if:condition,minor_damage,major_damage|nullable|numeric|min:1',
+            'notes' => 'required_if:condition,minor_damage,major_damage|nullable|string|min:3'
+        ], [
+            'damage_fee.required_if' => 'The damage fee is required when the motorcycle has damage.',
+            'damage_fee.min' => 'The damage fee must be at least Rp 1.',
+            'notes.required_if' => 'Notes describing the damage are required when the motorcycle has damage.',
+            'notes.min' => 'Notes must be at least 3 characters long.'
         ]);
 
         $rental = DB::table('rentals')->where('id', $request->rental_id)->first();
