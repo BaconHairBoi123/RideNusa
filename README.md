@@ -32,7 +32,7 @@
       <i>RideNusa adalah platform digital penyewaan sepeda motor modern terintegrasi. Dirancang untuk memudahkan penyewa memesan kendaraan melalui <b>Aplikasi Mobile (Flutter)</b> serta membantu pemilik rental mengelola administrasi, memantau posisi unit, dan mengontrol kelistrikan mesin secara real-time via <b>Dashboard Web Admin (Laravel)</b>.</i>
     </td>
     <td width="45%" align="center" valign="middle">
-      <img src="https://media.giphy.com/media/L33oPLIhkxgW0yCu1A/giphy.gif" width="200" alt="RideNusa Motorcycle Ride" />
+      <img src="https://i.giphy.com/L33oPLIhkxgW0yCu1A.gif" width="200" alt="RideNusa Motorcycle Ride" />
     </td>
   </tr>
 </table>
