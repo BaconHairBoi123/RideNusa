@@ -42,12 +42,13 @@
     </td>
     <td class="p-2">{{ $r->return_date }}</td>
 
-    <form method="POST" action="{{ route('admin.returns.store') }}">
-    @csrf
-    <input type="hidden" name="rental_id" value="{{ $r->id }}">
-
     <td class="p-2">
-        <select name="condition" class="border rounded p-1" required>
+        <form id="return-form-{{ $r->id }}" method="POST" action="{{ route('admin.returns.store') }}">
+            @csrf
+            <input type="hidden" name="rental_id" value="{{ $r->id }}">
+        </form>
+
+        <select name="condition" form="return-form-{{ $r->id }}" class="border rounded p-1" required>
             <option value="good">Good</option>
             <option value="minor_damage">Minor Damage</option>
             <option value="major_damage">Major Damage</option>
@@ -55,22 +56,20 @@
     </td>
 
     <td class="p-2">
-        <input type="number" name="damage_fee" placeholder="0" class="border rounded p-1 w-24">
+        <input type="number" name="damage_fee" form="return-form-{{ $r->id }}" placeholder="0" class="border rounded p-1 w-24">
     </td>
 
     <td class="p-2">
-        <input type="text" name="notes" class="border rounded p-1">
+        <input type="text" name="notes" form="return-form-{{ $r->id }}" class="border rounded p-1">
     </td>
 
     <td class="p-2 text-center">
         <div class="flex justify-center items-center">
-            <button class="px-4 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition shadow-sm font-medium">
+            <button type="submit" form="return-form-{{ $r->id }}" class="px-4 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition shadow-sm font-medium">
                 Submit
             </button>
         </div>
     </td>
-
-    </form>
 </tr>
 @empty
 <tr>

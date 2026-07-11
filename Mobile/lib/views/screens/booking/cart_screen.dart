@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,11 +20,18 @@ class _CartScreenState extends State<CartScreen> {
   List<Map<String, dynamic>> _allBookings = [];
   bool _isLoading = true;
   final currencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
+  Timer? _pollingTimer;
 
   @override
   void initState() {
     super.initState();
     _loadBookings();
+  }
+
+  @override
+  void dispose() {
+    _pollingTimer?.cancel();
+    super.dispose();
   }
 
   Future<void> _loadBookings() async {
@@ -34,8 +42,56 @@ class _CartScreenState extends State<CartScreen> {
         _allBookings = list;
         _isLoading = false;
       });
+      _checkAndStartPolling();
     } catch (_) {
       setState(() => _isLoading = false);
+    }
+  }
+
+  void _checkAndStartPolling() {
+    _pollingTimer?.cancel();
+    
+    // Find if there is any pending booking
+    final pendingBooking = _allBookings.firstWhere(
+      (b) => b['payment_status']?.toString().toLowerCase() == 'pending',
+      orElse: () => <String, dynamic>{},
+    );
+    
+    if (pendingBooking.isNotEmpty) {
+      final orderId = pendingBooking['order_id'];
+      if (orderId != null) {
+        _pollingTimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+          try {
+            final list = await _bookingService.getBookingHistory();
+            final updated = list.firstWhere(
+              (b) => b['order_id'] == orderId,
+              orElse: () => <String, dynamic>{},
+            );
+            if (updated.isNotEmpty) {
+              final status = updated['payment_status']?.toString().toLowerCase() ?? '';
+              if (status == 'paid' || status == 'settlement' || status == 'success') {
+                timer.cancel();
+                await closeInAppWebView();
+                try {
+                  final newList = await _bookingService.getBookingHistory();
+                  setState(() {
+                    _allBookings = newList;
+                  });
+                } catch (_) {}
+                if (mounted) {
+                  DialogHelper.showMessage(
+                    context: context,
+                    message: 'Payment successful! Status is now active.',
+                    isError: false,
+                  );
+                }
+              }
+            }
+          } catch (e) {
+            debugPrint('Polling error: $e');
+          }
+        });
+      }
     }
   }
 

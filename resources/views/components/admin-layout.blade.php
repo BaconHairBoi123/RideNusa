@@ -145,6 +145,66 @@
                 }
             }
         });
+
+        // Auto-refresh data every 5 seconds without page reload (HTML Swapping)
+        setInterval(function() {
+            // Skip refresh if user is typing or interacting with form inputs
+            const activeEl = document.activeElement;
+            if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT')) {
+                return;
+            }
+
+            const searchInput = document.getElementById('global-table-search');
+            const localSearchInput = document.getElementById('search-input');
+            const searchVal = (searchInput ? searchInput.value : '') + (localSearchInput ? localSearchInput.value : '');
+            
+            if (searchVal.trim() !== '') {
+                return;
+            }
+
+            fetch(window.location.href, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // 1. Swap table bodies
+                const currentTables = document.querySelectorAll('table');
+                const newTables = doc.querySelectorAll('table');
+                currentTables.forEach((table, index) => {
+                    if (newTables[index]) {
+                        const currentTbody = table.querySelector('tbody');
+                        const newTbody = newTables[index].querySelector('tbody');
+                        if (currentTbody && newTbody && currentTbody.innerHTML !== newTbody.innerHTML) {
+                            currentTbody.innerHTML = newTbody.innerHTML;
+                        }
+                    }
+                });
+
+                // 2. Swap stats numbers (dashboard cards)
+                const currentStats = document.querySelectorAll('h2.text-3xl.font-bold');
+                const newStats = doc.querySelectorAll('h2.text-3xl.font-bold');
+                currentStats.forEach((stat, index) => {
+                    if (newStats[index] && stat.textContent !== newStats[index].textContent) {
+                        stat.innerHTML = newStats[index].innerHTML;
+                    }
+                });
+
+                // 3. Swap notification alerts (dashboard notification lists)
+                const currentNotifs = document.querySelectorAll('ul.space-y-3');
+                const newNotifs = doc.querySelectorAll('ul.space-y-3');
+                currentNotifs.forEach((notif, index) => {
+                    if (newNotifs[index] && notif.innerHTML !== newNotifs[index].innerHTML) {
+                        notif.innerHTML = newNotifs[index].innerHTML;
+                    }
+                });
+            })
+            .catch(err => console.warn('Auto-refresh error:', err));
+        }, 5000);
     </script>
 </body>
 </html>
