@@ -1,14 +1,30 @@
-# <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/svgs/solid/motorcycle.svg" width="36" height="36" /> RideNusa - Sistem Penyewaan Motor & IoT Control
-
 <p align="center">
-  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel" />
-  <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter" />
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
-  <img src="https://img.shields.io/badge/Midtrans-SANDBOX-orange?style=for-the-badge" alt="Midtrans" />
-  <img src="https://img.shields.io/badge/IoT-Relay%20%26%20GPS-yellowgreen?style=for-the-badge&logo=internet-of-things&logoColor=white" alt="IoT" />
+  <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/svgs/solid/motorcycle.svg" width="100" height="100" style="fill: #FFB51D;" />
 </p>
 
-RideNusa adalah platform digital penyewaan sepeda motor modern terintegrasi yang dirancang untuk memberikan kemudahan bagi penyewa serta efisiensi kontrol operasional bagi pemilik rental. Sistem ini terdiri dari **Aplikasi Mobile (Flutter)** untuk pelanggan dan **Dashboard Web Admin (Laravel)** untuk pengelolaan administrasi serta kendali keamanan kendaraan jarak jauh berbasis IoT (GPS Tracker & Relay).
+<h1 align="center">RideNusa</h1>
+
+<p align="center">
+  <b>Sistem Penyewaan Motor & IoT Control Berbasis Mobile & Web</b>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-10.x-FF2D20?style=flat-square&logo=laravel&logoColor=white" alt="Laravel" />
+  <img src="https://img.shields.io/badge/Flutter-Framework-02569B?style=flat-square&logo=flutter&logoColor=white" alt="Flutter" />
+  <img src="https://img.shields.io/badge/Platform-Android-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Android" />
+  <img src="https://img.shields.io/badge/Database-MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white" alt="MySQL" />
+  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License" />
+</p>
+
+<p align="center">
+  RideNusa adalah platform digital penyewaan sepeda motor modern terintegrasi. Dirancang untuk memudahkan penyewa memesan kendaraan melalui <b>Aplikasi Mobile (Flutter)</b> serta membantu pemilik rental mengelola administrasi, memantau posisi unit, dan mengontrol kelistrikan mesin secara <i>real-time</i> via <b>Dashboard Web Admin (Laravel)</b> berbasis IoT (GPS Tracker & Relay).
+</p>
+
+---
+
+<p align="center">
+  <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzM5bXpweXR6NXE3ajlpeHpqOHdqOXF5ZzhkNGVqN3phcTRpdmI5bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L33oPLIhkxgW0yCu1A/giphy.gif" width="220" alt="RideNusa Motorcycle Ride" />
+</p>
 
 ---
 
@@ -46,35 +62,6 @@ Bagi penguji, dosen, atau responden yang ingin langsung menginstal aplikasi mobi
     *   **Real-time GPS Tracking:** Memantau sebaran lokasi unit motor sewaan di peta Google Maps.
     *   **Engine Kill Switch (Relay):** Memutus kelistrikan koil/starter motor jarak jauh langsung dari dashboard admin untuk mengantisipasi pencurian.
 *   **Servis & Perawatan:** Modul monitoring riwayat servis unit motor secara berkala.
-
----
-
-## 📐 Arsitektur Sistem (System Architecture)
-
-```mermaid
-graph TD
-    subgraph Client Layer
-        A[Flutter Mobile App]
-        B[Laravel Admin Panel]
-    end
-    subgraph Application Server
-        C[Laravel REST API]
-    end
-    subgraph Database Layer
-        D[(MySQL Database)]
-    end
-    subgraph External & Hardware
-        E[Midtrans Gateway API]
-        F[GPS Tracker & Relay IoT]
-    end
-    
-    A -->|1. HTTP / JSON API| C
-    B -->|2. Direct Eloquent Query| D
-    C -->|3. Read / Write| D
-    A -->|4. Payment Token / SNAP| E
-    B -->|5. Relay Command / GPRS| F
-    F -->|6. Send Coordinates| C
-```
 
 ---
 
