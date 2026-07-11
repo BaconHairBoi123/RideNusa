@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/svgs/solid/motorcycle.svg" width="100" height="100" style="fill: #FFB51D;" />
+  <img src="./Mobile/assets/images/logo_ridenusa_white.png" width="150" alt="RideNusa Logo" />
 </p>
 
 <h1 align="center">RideNusa</h1>
@@ -23,7 +23,7 @@
 ---
 
 <p align="center">
-  <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzM5bXpweXR6NXE3ajlpeHpqOHdqOXF5ZzhkNGVqN3phcTRpdmI5bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L33oPLIhkxgW0yCu1A/giphy.gif" width="220" alt="RideNusa Motorcycle Ride" />
+  <img src="https://media.giphy.com/media/L33oPLIhkxgW0yCu1A/giphy.gif" width="220" alt="RideNusa Motorcycle Ride" />
 </p>
 
 ---
