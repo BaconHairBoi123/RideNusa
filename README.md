@@ -5,7 +5,7 @@
 <h1 align="center">RideNusa</h1>
 
 <p align="center">
-  <b>Sistem Penyewaan Motor & IoT Control Berbasis Mobile & Web</b>
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&duration=3000&pause=1000&color=FFB51D&center=true&vCenter=true&width=500&lines=Smart+Motorcycle+Rental+System;IoT+GPS+%26+Engine+Relay+Control;Secure+Payments+via+Midtrans+Sandbox" alt="Typing SVG" />
 </p>
 
 <p align="center">
@@ -16,15 +16,26 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License" />
 </p>
 
-<p align="center">
-  RideNusa adalah platform digital penyewaan sepeda motor modern terintegrasi. Dirancang untuk memudahkan penyewa memesan kendaraan melalui <b>Aplikasi Mobile (Flutter)</b> serta membantu pemilik rental mengelola administrasi, memantau posisi unit, dan mengontrol kelistrikan mesin secara <i>real-time</i> via <b>Dashboard Web Admin (Laravel)</b> berbasis IoT (GPS Tracker & Relay).
-</p>
-
 ---
 
-<p align="center">
-  <img src="https://media.giphy.com/media/L33oPLIhkxgW0yCu1A/giphy.gif" width="220" alt="RideNusa Motorcycle Ride" />
-</p>
+## 📖 Tentang Proyek (About Project)
+
+<table width="100%">
+  <tr>
+    <td width="55%" valign="top">
+      <br/>
+      <b>Nama Proyek:</b> RideNusa <br/>
+      <b>Lokasi Pengujian:</b> Bali, Indonesia 🇮🇩 <br/>
+      <b>Fokus Utama:</b> Smart Motorcycle Rental Platform <br/>
+      <b>Teknologi IoT:</b> GPS Tracker & Relay Engine Kill Switch (ESP32/SinoTrack) <br/>
+      <br/>
+      <i>RideNusa adalah platform digital penyewaan sepeda motor modern terintegrasi. Dirancang untuk memudahkan penyewa memesan kendaraan melalui <b>Aplikasi Mobile (Flutter)</b> serta membantu pemilik rental mengelola administrasi, memantau posisi unit, dan mengontrol kelistrikan mesin secara real-time via <b>Dashboard Web Admin (Laravel)</b>.</i>
+    </td>
+    <td width="45%" align="center" valign="middle">
+      <img src="https://media.giphy.com/media/L33oPLIhkxgW0yCu1A/giphy.gif" width="200" alt="RideNusa Motorcycle Ride" />
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -42,7 +53,6 @@ Bagi penguji, dosen, atau responden yang ingin langsung menginstal aplikasi mobi
 > 2. Buka file hasil unduhan, lalu berikan izin *"Install from Unknown Sources"* (Instal dari sumber tidak dikenal) jika diminta oleh sistem keamanan Android.
 > 3. Selesaikan proses instalasi dan aplikasi siap digunakan.
 >
-> *(Catatan untuk Pengembang: Pastikan Anda telah menyalin berkas APK hasil build dari `Mobile/build/app/outputs/flutter-apk/` ke dalam folder `Mobile/release/` sebelum melakukan commit/push ke repositori).*
 
 ---
 
