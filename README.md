@@ -23,7 +23,6 @@
 <table width="100%">
   <tr>
     <td width="55%" valign="top">
-      <br/>
       <b>Nama Proyek:</b> RideNusa <br/>
       <b>Lokasi Pengujian:</b> Bali, Indonesia 🇮🇩 <br/>
       <b>Fokus Utama:</b> Smart Motorcycle Rental Platform <br/>
