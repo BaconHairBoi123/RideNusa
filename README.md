@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./Mobile/assets/images/Logo2.png" width="150" alt="RideNusa Logo" />
+  <img src="./Mobile/assets/images/logo2.png" width="150" alt="RideNusa Logo" />
 </p>
 
 <h1 align="center">RideNusa</h1>
