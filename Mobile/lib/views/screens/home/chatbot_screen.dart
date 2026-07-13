@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/app_theme.dart';
 import '../../../../REST-API/api_config.dart';
 
@@ -129,6 +130,12 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         // Remove '=' prefix if exists (expression bug in n8n)
         botReply = botReply.replaceFirst(RegExp(r'^='), '');
 
+        // Remove 'Tolong ya!' or 'Tolong ya, ' prefix
+        botReply = botReply.replaceFirst(RegExp(r'^Tolong ya[!,]?\s*', caseSensitive: false), '');
+        if (botReply.isNotEmpty) {
+          botReply = botReply[0].toUpperCase() + botReply.substring(1);
+        }
+
         setState(() {
           _messages.add(ChatMessage(
             text: botReply,
@@ -243,6 +250,56 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                 ],
               ),
             ),
+          // WhatsApp button located above the send message button
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0, bottom: 8.0),
+              child: InkWell(
+                onTap: () async {
+                  final Uri url = Uri.parse('https://wa.me/6281234567890');
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                  }
+                },
+                borderRadius: BorderRadius.circular(22),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.shade300),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Text(
+                        'Chat Admin',
+                        style: TextStyle(
+                          color: AppTheme.darkColor,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Image.asset(
+                      'assets/images/whatsapp.png',
+                      width: 40,
+                      height: 40,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           _buildInputArea(),
         ],
       ),

@@ -353,6 +353,12 @@
                 // Menghapus tanda = di awal jika ada (bug dari settingan n8n expression)
                 botReply = botReply.replace(/^=/, '');
 
+                // Menghapus awalan "Tolong ya" jika ada
+                botReply = botReply.replace(/^Tolong ya[!,]?\s*/i, '');
+                if (botReply.length > 0) {
+                    botReply = botReply.charAt(0).toUpperCase() + botReply.slice(1);
+                }
+
                 appendMessage(botReply, 'bot');
 
             } catch (error) {
