@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use App\Support\ActivityLogger;
 
 class LoginUserController extends Controller
 {
@@ -59,12 +60,20 @@ class LoginUserController extends Controller
 
             $request->session()->regenerate();
 
+            ActivityLogger::log('LOGIN', 'user', 'User berhasil login', [
+                'credential' => $credential,
+            ]);
+
             // Selalu arahkan ke User Dashboard, jangan gunakan intended()
             return redirect()->route('user.home')
                 ->with('success', 'Login Berhasil!');
         }
 
         // 5. Login Gagal
+        ActivityLogger::log('LOGIN_FAILED', 'user', 'Percobaan login user gagal', [
+            'credential' => $credential,
+        ]);
+
         throw ValidationException::withMessages([
             'credential' => ['Email/Username atau password salah.'],
         ]);
