@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Support\ActivityLogger;
 
 class AdminAccountController extends Controller
 {
@@ -30,11 +31,18 @@ class AdminAccountController extends Controller
             'password' => 'required|min:6'
         ]);
 
-        Admin::create([
+        $admin = Admin::create([
             'name' => $request->name,
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+        ]);
+
+        ActivityLogger::log('CREATE', 'admin', 'Admin menambahkan akun admin', [
+            'entity_id' => $admin->getKey(),
+            'name' => $admin->name,
+            'username' => $admin->username,
+            'email' => $admin->email,
         ]);
 
         return redirect()->route('admin.admins.index')
