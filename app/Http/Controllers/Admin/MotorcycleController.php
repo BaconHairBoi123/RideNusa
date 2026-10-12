@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Motorcycle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Support\ActivityLogger;
 
 class MotorcycleController extends Controller
 {
@@ -52,7 +53,15 @@ class MotorcycleController extends Controller
                 ->store('motorcycles', 'public');
         }
 
-        Motorcycle::create($data);
+        $motorcycle = Motorcycle::create($data);
+
+        ActivityLogger::log('CREATE', 'motorcycle', 'Admin menambahkan motor', [
+            'entity_id' => $motorcycle->getKey(),
+            'brand' => $motorcycle->brand,
+            'category' => $motorcycle->category,
+            'type' => $motorcycle->type,
+            'license_plate' => $motorcycle->license_plate,
+        ]);
 
         return redirect()
             ->route('admin.motorcycles_Management.index')
