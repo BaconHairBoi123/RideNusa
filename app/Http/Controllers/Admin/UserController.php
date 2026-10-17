@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Support\ActivityLogger;
 
 class UserController extends Controller
 {
@@ -25,6 +26,31 @@ class UserController extends Controller
             ->paginate(10);
 
         return view('admin.users.index', compact('users'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'username' => 'required|string|max:50|unique:users,username',
+            'email' => 'required|string|email|max:100|unique:users,email',
+            'password' => 'required|string|min:8',
+            'address' => 'nullable|string',
+            'phone_number' => 'nullable|string|max:20',
+            'verification_status' => 'sometimes|in:verified,unverified',
+        ]);
+
+        $validated['password'] = \Illuminate\Support\Facades\Hash::make($validated['password']);
+        $user = User::create($validated);
+
+        ActivityLogger::log('CREATE', 'user', 'Admin menambahkan user', [
+            'entity_id' => $user->getKey(),
+            'name' => $user->name,
+            'username' => $user->username,
+            'email' => $user->email,
+        ]);
+
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
 
     public function show(User $user)
