@@ -35,6 +35,8 @@ Route::get('/users', [AuthController::class, 'index']);
 Route::get('/motorcycles', [MotorcycleController::class, 'index']);
 Route::get('/motorcycles/services', [MotorcycleController::class, 'services']);
 Route::get('/motorcycles/{id}', [MotorcycleController::class, 'show']);
+Route::post('/motorcycles/generate-embedding', [MotorcycleController::class, 'generateEmbedding']);
+Route::post('/motorcycles/vector-search', [MotorcycleController::class, 'vectorSearch']);
 Route::post('/motorcycles', [MotorcycleController::class, 'store']);
 Route::put('/motorcycles/{id}', [MotorcycleController::class, 'update']);
 Route::patch('/motorcycles/{id}', [MotorcycleController::class, 'update']);
@@ -64,6 +66,7 @@ Route::delete('/service_types/{id}', [ServiceTypeController::class, 'destroy']);
 
 // GPS API (dari ESP32) - PUBLIC karena ESP32 tidak ada token
 Route::post('/gps/update', [GpsController::class, 'updateLocation']);
+Route::post('/gps/radius', [GpsController::class, 'nearbyLocations']);
 Route::get('/gps/status-relay', [GpsController::class, 'statusRelay']);
 Route::get('/gps/latest/{device_id}', [GpsController::class, 'getLatestLocation']);
 Route::get('/gps/history/{motorcycle_id}', [GpsController::class, 'getMotorcycleHistory']);

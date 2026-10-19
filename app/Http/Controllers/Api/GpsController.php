@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Device;
 use App\Models\Locations;
 
@@ -54,11 +55,82 @@ class GpsController extends Controller
             $message = 'Koordinat awal berhasil dibuat (Created)';
         }
 
+        // Simpan ulang koordinat sebagai Point PostGIS agar dapat dipakai
+        // untuk perhitungan jarak dan pencarian radius.
+        $this->syncSpatialPoint($location);
+
         return response()->json([
             'status' => 'success',
             'message' => $message,
             'data' => $location
         ], 200);
+    }
+
+    /**
+     * Mencari lokasi GPS dalam radius tertentu dari titik pengguna.
+     * POST /api/gps/radius
+     */
+    public function nearbyLocations(Request $request)
+    {
+        $validated = $request->validate([
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
+            'radius_meter' => 'required|integer|min:1|max:50000',
+        ]);
+
+        $point = "extensions.ST_SetSRID(extensions.ST_MakePoint(CAST(? AS double precision), CAST(? AS double precision)), 4326)::geography";
+
+        $locations = DB::select(
+            "SELECT
+                l.id,
+                l.device_id,
+                l.latitude,
+                l.longitude,
+                m.id AS motorcycle_id,
+                m.brand,
+                m.type,
+                m.license_plate,
+                ROUND(extensions.ST_Distance(l.location_point::geography, {$point}))::integer AS distance_meter
+             FROM public.locations l
+             LEFT JOIN public.devices d ON d.id = l.device_id
+             LEFT JOIN public.motorcycles m ON m.device_id = d.id
+             WHERE l.location_point IS NOT NULL
+               AND extensions.ST_DWithin(
+                   l.location_point::geography,
+                   {$point},
+                   CAST(? AS double precision)
+               )
+             ORDER BY distance_meter ASC",
+            [
+                $validated['longitude'], $validated['latitude'],
+                $validated['longitude'], $validated['latitude'],
+                $validated['radius_meter'],
+            ]
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'search_center' => [
+                'latitude' => (float) $validated['latitude'],
+                'longitude' => (float) $validated['longitude'],
+            ],
+            'radius_meter' => (int) $validated['radius_meter'],
+            'result_count' => count($locations),
+            'data' => $locations,
+        ]);
+    }
+
+    private function syncSpatialPoint(Locations $location): void
+    {
+        DB::statement(
+            'UPDATE public.locations
+             SET location_point = extensions.ST_SetSRID(
+                 extensions.ST_MakePoint(CAST(? AS double precision), CAST(? AS double precision)),
+                 4326
+             )
+             WHERE id = ?',
+            [$location->longitude, $location->latitude, $location->id]
+        );
     }
 
     /**
