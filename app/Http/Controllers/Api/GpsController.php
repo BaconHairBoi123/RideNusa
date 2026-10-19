@@ -78,7 +78,7 @@ class GpsController extends Controller
             'radius_meter' => 'required|integer|min:1|max:50000',
         ]);
 
-        $point = "extensions.ST_SetSRID(extensions.ST_MakePoint(CAST(? AS double precision), CAST(? AS double precision)), 4326)::geography";
+        $point = "extensions.ST_SetSRID(extensions.ST_MakePoint(CAST(? AS double precision), CAST(? AS double precision)), 4326)::extensions.geography";
 
         $locations = DB::select(
             "SELECT
@@ -90,13 +90,13 @@ class GpsController extends Controller
                 m.brand,
                 m.type,
                 m.license_plate,
-                ROUND(extensions.ST_Distance(l.location_point::geography, {$point}))::integer AS distance_meter
+                ROUND(extensions.ST_Distance(l.location_point::extensions.geography, {$point}))::integer AS distance_meter
              FROM public.locations l
              LEFT JOIN public.devices d ON d.id = l.device_id
              LEFT JOIN public.motorcycles m ON m.device_id = d.id
              WHERE l.location_point IS NOT NULL
                AND extensions.ST_DWithin(
-                   l.location_point::geography,
+                   l.location_point::extensions.geography,
                    {$point},
                    CAST(? AS double precision)
                )
