@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\LocationController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\GpsController;
 use App\Http\Controllers\Api\ServiceTypeController;
+use App\Http\Controllers\Api\Neo4jController;
 
 /*
 |--------------------------------------------------------------------------
@@ -94,5 +95,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // GPS Relay Control
     Route::post('/gps/relay', [GpsController::class, 'updateRelayStatus']);
+
+    // Rekomendasi motor berdasarkan traversal graph Neo4j
+    Route::get('/graph/motorcycle-recommendations', [Neo4jController::class, 'motorcycleRecommendations']);
 
 });

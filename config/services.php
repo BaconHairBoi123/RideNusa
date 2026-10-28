@@ -43,4 +43,10 @@ return [
         'is_3ds' => env('MIDTRANS_IS_3DS', true),
     ],
 
+    'neo4j' => [
+        'uri' => env('NEO4J_URI'),
+        'username' => env('NEO4J_USERNAME'),
+        'password' => env('NEO4J_PASSWORD'),
+    ],
+
 ];
