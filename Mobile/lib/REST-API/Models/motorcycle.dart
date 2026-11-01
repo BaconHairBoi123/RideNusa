@@ -29,12 +29,38 @@ class Motorcycle {
     this.description,
   });
 
+  // Mengubah path gambar menjadi URL yang bisa diakses.
+  static String? _resolveImageUrl(dynamic value) {
+    if (value == null) return null;
+
+    final String path = value.toString().trim();
+
+    if (path.isEmpty || path.toLowerCase() == 'null') {
+      return null;
+    }
+
+    // Jika sudah berupa URL lengkap (Supabase atau URL lainnya).
+    if (path.startsWith('https://') || path.startsWith('http://')) {
+      return path;
+    }
+
+    // Jika berupa path relatif.
+    return '${ApiConfig.imageUrl}/${path.replaceFirst(RegExp(r'^/+'), '')}';
+  }
+
   factory Motorcycle.fromJson(Map<String, dynamic> json) {
     String typeRaw = json['type'] ?? '';
     String typeFormatted = typeRaw.replaceAll('_', ' ');
-    typeFormatted = typeFormatted.split(' ').map((str) => str.isNotEmpty ? '${str[0].toUpperCase()}${str.substring(1)}' : '').join(' ');
+
+    typeFormatted = typeFormatted
+        .split(' ')
+        .map((str) => str.isNotEmpty
+            ? '${str[0].toUpperCase()}${str.substring(1)}'
+            : '')
+        .join(' ');
 
     int priceInt = 0;
+
     if (json['price'] != null) {
       if (json['price'] is String) {
         priceInt = double.tryParse(json['price'])?.toInt() ?? 0;
@@ -43,22 +69,30 @@ class Motorcycle {
       }
     }
 
-    // image_path from DB already includes the folder prefix, e.g. "motorcycles/filename.jpg"
-    // So we just append it to the storage base URL directly
-    String? imgPath = json['image_path'];
-    String? imgUrl = imgPath != null ? '${ApiConfig.imageUrl}/$imgPath' : json['image_url'];
+    // Prioritaskan image_url karena bisa berupa URL publik Supabase.
+    // image_path hanya digunakan sebagai fallback.
+    final String? imgUrl =
+        _resolveImageUrl(json['image_url']) ??
+        _resolveImageUrl(json['image_path']);
 
-    final List<dynamic> galleryJson = json['images'] ?? json['gallery'] ?? [];
+    final List<dynamic> galleryJson =
+        json['images'] ?? json['gallery'] ?? [];
+
     final List<String> galleryList = [];
+
     for (var img in galleryJson) {
-      if (img is Map && img['image_url'] != null) {
-        galleryList.add(img['image_url'].toString());
-      } else if (img is Map && img['image_path'] != null) {
-        galleryList.add('${ApiConfig.imageUrl}/${img['image_path']}');
+      if (img is Map) {
+        final String? galleryUrl =
+            _resolveImageUrl(img['image_url']) ??
+            _resolveImageUrl(img['image_path']);
+
+        if (galleryUrl != null) {
+          galleryList.add(galleryUrl);
+        }
       }
     }
-    
-    if (imgUrl != null && imgUrl.isNotEmpty) {
+
+    if (imgUrl != null && !galleryList.contains(imgUrl)) {
       galleryList.insert(0, imgUrl);
     }
 

@@ -36,15 +36,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Future<void> _loadBookings() async {
+    if (!mounted) return;
     setState(() => _isLoading = true);
+
     try {
       final list = await _bookingService.getBookingHistory();
+      if (!mounted) return;
+
       setState(() {
         _allBookings = list;
         _isLoading = false;
       });
       _checkAndStartPolling();
     } catch (_) {
+      if (!mounted) return;
       setState(() => _isLoading = false);
     }
   }
@@ -62,8 +67,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
       final orderId = pendingBooking['order_id'];
       if (orderId != null) {
         _pollingTimer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+          if (!mounted) {
+            timer.cancel();
+            return;
+          }
           try {
             final list = await _bookingService.getBookingHistory();
+            if (!mounted) {
+              timer.cancel();
+              return;
+            }
             final updated = list.firstWhere(
               (b) => b['order_id'] == orderId,
               orElse: () => <String, dynamic>{},
@@ -75,6 +88,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 await closeInAppWebView();
                 try {
                   final newList = await _bookingService.getBookingHistory();
+                  if (!mounted) return;
                   setState(() {
                     _allBookings = newList;
                   });

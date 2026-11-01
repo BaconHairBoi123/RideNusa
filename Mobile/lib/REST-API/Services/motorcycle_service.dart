@@ -3,28 +3,39 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api_config.dart';
 import '../Models/motorcycle.dart';
+import 'package:flutter/foundation.dart';
 
 class MotorcycleService {
   Future<List<Motorcycle>> getMotorcycles() async {
-    try {
-      final response = await http.get(Uri.parse('${ApiConfig.baseUrl}/motorcycles'));
+  try {
+    final response = await http.get(
+      Uri.parse('${ApiConfig.baseUrl}/motorcycles'),
+      headers: {
+        'Accept': 'application/json',
+      },
+    );
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        
-        if (responseData['status'] == 'success') {
-          final List<dynamic> data = responseData['data'];
-          return data.map((json) => Motorcycle.fromJson(json)).toList();
-        } else {
-          throw Exception('Failed to load motorcycles: ${responseData['message']}');
-        }
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData =
+          json.decode(response.body);
+
+      if (responseData['status'] == 'success') {
+        final List<dynamic> data = responseData['data'];
+        return data.map((json) => Motorcycle.fromJson(json)).toList();
       } else {
-        throw Exception('Failed to load motorcycles. Status Code: ${response.statusCode}');
+        throw Exception(
+          'Failed to load motorcycles: ${responseData['message']}',
+        );
       }
-    } catch (e) {
-      throw Exception('Network error: $e');
+    } else {
+      throw Exception(
+        'Failed to load motorcycles. Status Code: ${response.statusCode}',
+      );
     }
+  } catch (e) {
+    throw Exception('Network error: $e');
   }
+}
 
   Future<List<dynamic>> getMotorcycleServices({String? licensePlate}) async {
     try {

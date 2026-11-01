@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    // Validation for SIM upload
+    // SIM photo is required only for users who have a SIM.
     if (_verificationType == 'sim') {
       if (_licensePhotoPath == null || _licensePhotoPath!.isEmpty) {
         DialogHelper.showMessage(
@@ -98,14 +98,16 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         return;
       }
-      if (_facePhotoPath == null || _facePhotoPath!.isEmpty) {
-        DialogHelper.showMessage(
-          context: context,
-          message: "Please upload your Face Selfie photo to proceed.",
-          isError: true,
-        );
-        return;
-      }
+    }
+
+    // Face selfie is required for both SIM and riding-course registration.
+    if (_facePhotoPath == null || _facePhotoPath!.isEmpty) {
+      DialogHelper.showMessage(
+        context: context,
+        message: "Please upload your Face Selfie photo to proceed.",
+        isError: true,
+      );
+      return;
     }
 
     // Close keyboard automatically
@@ -924,26 +926,17 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         const SizedBox(height: 24),
 
-        // Conditional Verification Form Fields
+        // SIM photo is shown only when the user selects SIM.
         if (_verificationType == 'sim') ...[
-          // SIM Upload Box
           _buildImageUploadBox(
-            title: 'Driver\'s License (SIM C) Photo *',
+            title: "Driver's License (SIM C) Photo *",
             imagePath: _licensePhotoPath,
             onTap: () => _pickImage('license'),
             onClear: () => setState(() => _licensePhotoPath = null),
           ),
           const SizedBox(height: 16),
-
-          // Face Upload Box (Required)
-          _buildImageUploadBox(
-            title: 'Face Selfie Photo *',
-            imagePath: _facePhotoPath,
-            onTap: () => _pickImage('face'),
-            onClear: () => setState(() => _facePhotoPath = null),
-          ),
         ] else ...[
-          // Riding Course Friendly Alert
+          // Riding Course information for users without a SIM.
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -979,7 +972,16 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
+          const SizedBox(height: 16),
         ],
+
+        // Face selfie is required for both SIM and riding-course registration.
+        _buildImageUploadBox(
+          title: 'Face Selfie Photo *',
+          imagePath: _facePhotoPath,
+          onTap: () => _pickImage('face'),
+          onClear: () => setState(() => _facePhotoPath = null),
+        ),
 
         const SizedBox(height: 32),
 

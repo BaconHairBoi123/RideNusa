@@ -61,18 +61,20 @@ class AuthService {
       request.fields['address'] = address;
       request.fields['verification_type'] = verificationType;
 
-      // Add file fields if available and verification type is 'sim'
-      if (verificationType == 'sim') {
-        if (licensePhotoPath != null && licensePhotoPath.isNotEmpty) {
-          request.files.add(
-            await http.MultipartFile.fromPath('license_photo', licensePhotoPath),
-          );
-        }
-        if (facePhotoPath != null && facePhotoPath.isNotEmpty) {
-          request.files.add(
-            await http.MultipartFile.fromPath('face_photo', facePhotoPath),
-          );
-        }
+      // Face photo is required for both SIM and course registration.
+      if (facePhotoPath != null && facePhotoPath.isNotEmpty) {
+        request.files.add(
+          await http.MultipartFile.fromPath('face_photo', facePhotoPath),
+        );
+      }
+
+      // License photo is only uploaded when the user selects SIM verification.
+      if (verificationType == 'sim' &&
+          licensePhotoPath != null &&
+          licensePhotoPath.isNotEmpty) {
+        request.files.add(
+          await http.MultipartFile.fromPath('license_photo', licensePhotoPath),
+        );
       }
 
       final streamedResponse = await request.send();
