@@ -9,6 +9,7 @@ use App\Models\AdditionalAccessories;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PageController extends Controller
 {
@@ -47,6 +48,12 @@ class PageController extends Controller
         }
 
         $motorcycles = $query->get();
+
+        // Buat URL gambar yang mendukung Supabase Storage dan penyimpanan lokal.
+        $motorcycles->transform(function ($motorcycle) {
+            $motorcycle->image_url = $this->imageUrl($motorcycle->image_path);
+            return $motorcycle;
+        });
 
         // AJAX request untuk pencarian real-time
         if ($request->ajax()) {
@@ -126,6 +133,12 @@ class PageController extends Controller
         // 3. Pagination
         $motorcycles = $query->paginate(9)->withQueryString();
 
+        // Buat URL gambar untuk setiap motor pada halaman katalog.
+        $motorcycles->getCollection()->transform(function ($motorcycle) {
+            $motorcycle->image_url = $this->imageUrl($motorcycle->image_path);
+            return $motorcycle;
+        });
+
         // 4. Kirim ke view
         return view('user.motorcycles', compact(
             'motorcycles',
@@ -137,6 +150,34 @@ class PageController extends Controller
     }
 
 
+
+    /**
+     * Menghasilkan URL gambar dari Supabase Storage atau penyimpanan lokal
+     * tanpa melakukan blocking network request.
+     */
+    private function imageUrl(?string $path): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+
+        // Jika path sudah berupa URL lengkap, gunakan langsung.
+        if (filter_var($path, FILTER_VALIDATE_URL)) {
+            return $path;
+        }
+
+        // Cek disk lokal terlebih dahulu (sangat cepat di SSD, 0ms latency).
+        if (Storage::disk('public')->exists($path)) {
+            return asset('storage/' . $path);
+        }
+
+        // Generate URL Supabase di memori tanpa HTTP HEAD request ke cloud
+        try {
+            return Storage::disk('s3')->url($path);
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
 
     public function showMotorcycle($id)
     {
